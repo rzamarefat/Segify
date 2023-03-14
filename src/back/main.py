@@ -1,21 +1,36 @@
 from flask import Flask
+import requests
 from flask_restful import Api, Resource, reqparse
 from FaceSegmenter import FaceSegmenter
 import werkzeug
 import cv2
+from flask_cors import CORS
+
   
 app =   Flask(__name__)
-api =   Api(app)
+# app.config['SECRET_KEY'] = 'the quick brown fox jumps over the lazy   dog'
+app.config['CORS_HEADERS'] = 'Content-Type'
+
+CORS(app, origins="*")
+
+api =  Api(app)
 
 fs = FaceSegmenter()
 
 class UploadImage(Resource):
+    def get(self):
+        pass
+        
+
     def post(self):
         parse = reqparse.RequestParser()
         parse.add_argument('file', type=werkzeug.datastructures.FileStorage, location='files')
         args = parse.parse_args()
+        print("args",args)
         image_file = args['file']
-        image_file.save("your_file_name.jpg")
+        
+        # image_file.save("your_file_name.jpg")
+        pass
 
 class Home(Resource):
     def get(self):

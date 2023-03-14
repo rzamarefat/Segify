@@ -17,7 +17,7 @@ const Button = ({text}) => {
             console.log("2")
             console.log(text)
         }else if (text == "Analyse"){
-            dispatch(Analyse(uploadedImage))
+            
         }
             
     }
@@ -48,7 +48,7 @@ const Button = ({text}) => {
             {text === "Analyse" && 
             <>
                 <img className="preview" src={uploadedImage} alt="" />
-                <button onClick={()=>handleButtonClick(text)} type="button" class="btn text-light bg-dark d-flex justify-content-center align-items-center p-5 label-btn">Analyse</button>
+                <button onClick={()=>dispatch(Analyse(uploadedImage))} type="button" class="btn text-light bg-dark d-flex justify-content-center align-items-center p-5 label-btn">Analyse</button>
                 
             </>
             }
