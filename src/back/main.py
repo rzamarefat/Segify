@@ -24,7 +24,7 @@ class UploadImage(Resource):
 
     def post(self):
         parse = reqparse.RequestParser()
-        parse.add_argument('file', type=werkzeug.datastructures.FileStorage, location='files')
+        parse.add_argument('file', required=True, type=werkzeug.datastructures.FileStorage, location='files')
         args = parse.parse_args()
         print("args",args)
         image_file = args['file']
