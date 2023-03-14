@@ -1,0 +1,14 @@
+*{
+    font-family: 'PT Serif', serif !important;
+}
+
+/* ---------------------- buttons ---------------------------------- */
+
+.label-btn{
+    font-size: 2rem !important;  
+    min-width: 100%;
+    padding: 3rem 2rem;
+    margin-top: 2rem;
+    cursor: pointer !important;
+}
+
