@@ -1,2 +1,4 @@
 export const UPLOAD = "UPLOAD"
 export const ANALYSE = "ANALYSE"
+export const UPDATE_UPLOADED_IMAGE_AREA = "UPDATE_UPLOADED_IMAGE_AREA"
+

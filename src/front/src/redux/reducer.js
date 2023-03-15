@@ -6,9 +6,16 @@ const reducer = (state = initialState, action) => {
     switch (action.type) {
         case UPLOAD:
             return {
-                ...state, imageFile: action.payload
+                ...state, 
+                imageFile: action.payload,
+                imageFileForDisplay: URL.createObjectURL(action.payload),
+                
             }
-            
+        case ANALYSE:
+            return {
+                ...state,
+            }
+
         default:
             return state;
     }

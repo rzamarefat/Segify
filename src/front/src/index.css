@@ -12,3 +12,8 @@
     cursor: pointer !important;
 }
 
+
+.preview{
+    max-width: 100% !important;
+    min-width: 100% !important;
+}

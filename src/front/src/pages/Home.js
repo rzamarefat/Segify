@@ -5,8 +5,9 @@ import Profile from '../components/Profile'
 import { useDispatch, useSelector } from "react-redux"
 
 const Home = () => {
-    const uploadedImage = useSelector(state => state.imageFile)
-
+    const uploadedImageFileForDisplay = useSelector(state => state.imageFileForDisplay)
+    
+    
     return (
         <>
             <Navbar/>
@@ -19,9 +20,10 @@ const Home = () => {
                                 <h4 className='display-6 mt-5 text-center'>A tool for segmenting objects in images instantly</h4>
                             </div>
                             <div>
-                                {!uploadedImage && <Button text="Upload an image"/>}
-                                {!uploadedImage && <Button text="Take a photo"/>}
-                                {uploadedImage && <Button text="Analyse"/>}
+                                {!uploadedImageFileForDisplay && <Button text="Upload an image"/>}
+                                {!uploadedImageFileForDisplay && <Button text="Take a photo"/>}
+                                {uploadedImageFileForDisplay && <Button text="Analyse"/>}
+
 
                                 
 

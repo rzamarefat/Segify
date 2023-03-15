@@ -1,6 +1,7 @@
 const initialState = {
     "imageFile": null,
-    
+    "imageFileForDisplay": null
+
 }
 
 

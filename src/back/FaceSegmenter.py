@@ -1,11 +1,11 @@
 from ultralytics import YOLO
-from config import config
+from config import YOLO_WEIGHTS_PATH
 import numpy as np
 import cv2
 
 class FaceSegmenter:
     def __init__(self):
-        self._yolo_pretrained_weights = config["yolo_weights"]
+        self._yolo_pretrained_weights = YOLO_WEIGHTS_PATH
         self._yolo = YOLO(self._yolo_pretrained_weights)
 
     def segment(self, image: np.array):

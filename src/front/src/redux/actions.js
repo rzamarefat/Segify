@@ -1,5 +1,6 @@
 import {UPLOAD, ANALYSE} from './actionTypes'
 import initialState from './initiaState'
+import axios from 'axios';
 
 
 export const Upload = (imageFile) => {
@@ -9,29 +10,69 @@ export const Upload = (imageFile) => {
     }
 }
 
-export const Analyse = (imageFile) => {
-    const data = new FormData();
+const postImage = async(imageFile) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(imageFile)
     
-    data.append("file", imageFile);
-    const headers = {'Content-Type':'application/json',
-                    'Access-Control-Allow-Origin':'*',
-                    'Access-Control-Allow-Methods':'POST,PATCH,OPTIONS'}
-
-    console.log(data.get("file"))
-    fetch('http://localhost:5000/upload', {
-        method: 'POST',
-        body: data,
-        mode: "no-cors",
-        headers:headers,
+    axios
+    .post('http://localhost:5001/upload', imageFile, {
+        headers: {
+            'Content-Type': `application/json`,
+        },}
+        )
+    .then((res) => {
+        console.log("IIIINJAJAJJAJAJAJAJAJAJA")
+        console.log(res)
     })
-    .then((res) => res.json())
-    .then((data) => console.log(data))
-    .catch((err) => console.error(err));
+    .catch((error) => {
+        console.log("IIIINJAJAJJAJAJAJAJAJAJA")
+        console.log(error.response);
+    });
+}
 
+
+const getImageFromBackend = async(imageFile) => {
+    axios.get('http://localhost:5001/image').then(resp => {
+        console.log(resp);
+        })
+        .then((res)=> {
+            console.log(res);
+        })
+        .catch((error) => {
+            console.log(error.response);
+        });
+    
+    return {
+        type: null,
+    }
+    
+}
+
+
+
+export const Analyse = (imageFile) => {
+    console.log("inside analyse")
+    
+    postImage(imageFile)
+    // while(true){
+        
+
+    // }
+    
+    return {
+        type: ANALYSE,
+    }
+
+
+}
+
+export const UpdateUploadedAreaImage = () => {
+    getImageFromBackend()
     return {
         type: null,
     }
 }
+
 
 
 
