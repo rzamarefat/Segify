@@ -1,4 +1,5 @@
 /src/back/venv
 /src/back/__pycache__
 *.png
+*.jpg
 src/back/assets/*

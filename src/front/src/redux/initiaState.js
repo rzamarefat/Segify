@@ -1,6 +1,8 @@
 const initialState = {
     "imageFile": null,
-    "imageFileForDisplay": null
+    "imageFileForDisplay": null,
+    "isWebcamOn": false,
+    
 
 }
 

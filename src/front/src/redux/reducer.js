@@ -1,5 +1,5 @@
 import initialState from "./initiaState"
-import { UPLOAD, ANALYSE } from "./actionTypes";
+import { UPLOAD, ANALYSE, TURN_ON_WEBCAM } from "./actionTypes";
 
 
 const reducer = (state = initialState, action) => {
@@ -14,6 +14,12 @@ const reducer = (state = initialState, action) => {
         case ANALYSE:
             return {
                 ...state,
+            }
+
+        case TURN_ON_WEBCAM:
+            return {
+                ...state,
+                isWebcamOn: true,
             }
 
         default:

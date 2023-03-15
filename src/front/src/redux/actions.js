@@ -1,4 +1,4 @@
-import {UPLOAD, ANALYSE} from './actionTypes'
+import {UPLOAD, ANALYSE, TURN_ON_WEBCAM} from './actionTypes'
 import initialState from './initiaState'
 import axios from 'axios';
 
@@ -14,31 +14,58 @@ const postImage = async(imageFile) => {
     const reader = new FileReader();
     reader.readAsDataURL(imageFile)
     
-    axios
+    const res = await axios
     .post('http://localhost:5001/upload', imageFile, {
         headers: {
             'Content-Type': `application/json`,
         },}
         )
-    .then((res) => {
-        console.log("IIIINJAJAJJAJAJAJAJAJAJA")
+    .then(async(res) => {
+        
         console.log(res)
+        console.log("postImage action successful")
+        const labels = await getDataFromBack()
+        console.log("labels.data:", labels)
+
+        // getDataFromBack()
     })
     .catch((error) => {
-        console.log("IIIINJAJAJJAJAJAJAJAJAJA")
+        console.log("postImage action unsuccessful")
         console.log(error.response);
     });
+
+
+    
+}
+
+const getDataFromBack = () => {
+    axios.get('http://localhost:5001/upload').then(resp => {
+        console.log(resp);
+        })
+        .then((res)=> {
+            console.log("getDataFromBack action successful")
+            
+            console.log(res);
+            return res
+        })
+        .catch((error) => {
+            console.log("getDataFromBack action unsuccessful")
+            console.log(error.response);
+        });
+    
 }
 
 
-const getImageFromBackend = async(imageFile) => {
+const getImageFromBackend = () => {
     axios.get('http://localhost:5001/image').then(resp => {
         console.log(resp);
         })
         .then((res)=> {
+            console.log("getImageFromBackend action successful")
             console.log(res);
         })
         .catch((error) => {
+            console.log("getImageFromBackend action unsuccessful")
             console.log(error.response);
         });
     
@@ -49,15 +76,20 @@ const getImageFromBackend = async(imageFile) => {
 }
 
 
+export const UpdateUploadedAreaImage = () => {
+    getImageFromBackend()
+    return {
+        type: null,
+    }
+}
+
 
 export const Analyse = (imageFile) => {
     console.log("inside analyse")
     
     postImage(imageFile)
-    // while(true){
-        
 
-    // }
+    
     
     return {
         type: ANALYSE,
@@ -66,13 +98,13 @@ export const Analyse = (imageFile) => {
 
 }
 
-export const UpdateUploadedAreaImage = () => {
-    getImageFromBackend()
+
+
+export const TurnWebcamOn = () =>{
     return {
-        type: null,
+        type: TURN_ON_WEBCAM,
     }
 }
-
 
 
 

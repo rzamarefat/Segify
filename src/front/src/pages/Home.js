@@ -1,11 +1,12 @@
 import Navbar from '../components/Navbar'
-import Button from '../components/Button'
+import Panel from '../components/Panel'
 import WebCam from '../components/WebCam'
 import Profile from '../components/Profile'
 import { useDispatch, useSelector } from "react-redux"
 
 const Home = () => {
     const uploadedImageFileForDisplay = useSelector(state => state.imageFileForDisplay)
+    const isWebcamOn = useSelector(state => state.isWebcamOn)
     
     
     return (
@@ -20,12 +21,12 @@ const Home = () => {
                                 <h4 className='display-6 mt-5 text-center'>A tool for segmenting objects in images instantly</h4>
                             </div>
                             <div>
-                                {!uploadedImageFileForDisplay && <Button text="Upload an image"/>}
-                                {!uploadedImageFileForDisplay && <Button text="Take a photo"/>}
-                                {uploadedImageFileForDisplay && <Button text="Analyse"/>}
+                                {(!uploadedImageFileForDisplay && !isWebcamOn)? <Panel text="Upload an image"/>: <></>}
+                                {(!uploadedImageFileForDisplay && !isWebcamOn)? <Panel text="Take a photo"/>: <></>}
+                                {uploadedImageFileForDisplay && <Panel text="Analyse"/>}
 
 
-                                
+                                {isWebcamOn && <WebCam/>}
 
                             </div>
                             

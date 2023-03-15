@@ -15,44 +15,39 @@ const Profile = () => {
   })
   return (
     <div>
-      <h2 className="mb-5 text-center">
-        React Photo Capture using Webcam Examle
-      </h2>
-      <div>
-        {picture == '' ? (
-          <Webcam
-            audio={false}
-            height={400}
-            ref={webcamRef}
-            width={400}
-            screenshotFormat="image/jpeg"
-            videoConstraints={videoConstraints}
-          />
-        ) : (
-          <img src={picture} />
-        )}
+      <div className='row d-flex flex-column justify-content-center align-items-center'>
       </div>
+        <div className="row  d-flex justify-content-center align-items-center">
+          <div className='col-sm-6 d-flex justify-content-center align-items-center'>
+                                {picture == '' ? (
+                                <Webcam
+                                  audio={false}
+                                  height={500}
+                                  ref={webcamRef}
+                                  width={800}
+                                  screenshotFormat="image/jpeg"
+                                  videoConstraints={videoConstraints}
+                                />
+                              ) : (
+                                <img src={picture} />
+                              )}
+          </div>
+
+        </div>
+        
       <div>
         {picture != '' ? (
-          <button
-            onClick={(e) => {
+          <button onClick={(e) => {
               e.preventDefault()
               setPicture()
-            }}
-            className="btn btn-primary"
-          >
-            Retake
-          </button>
+            }} type="button" className="btn text-light bg-dark d-flex justify-content-center align-items-center p-4 label-btn">Take a photo</button>
+          
         ) : (
-          <button
-            onClick={(e) => {
-              e.preventDefault()
-              capture()
-            }}
-            className="btn btn-danger"
-          >
-            Capture
-          </button>
+          <button onClick={(e) => {
+            e.preventDefault()
+            capture()
+          }} type="button" className="btn text-light bg-dark d-flex justify-content-center align-items-center p-4 label-btn">Capture</button>
+          
         )}
       </div>
     </div>

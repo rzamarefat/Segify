@@ -9,8 +9,7 @@ TESTING = True
 DEBUG = True
 FLASK_ENV = 'development'
 
-
-ROOT_PATH_TO_SAVE_IMAGES = os.path.join(current_path, "assets")
+ROOT_PATH_TO_SAVE_ASSESTS = os.path.join(current_path, "assets")
 
 
 

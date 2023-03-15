@@ -3,7 +3,7 @@ import { Provider } from 'react-redux'
 import Store from './redux/store'
 
 import Home from "./pages/Home"
-import PageB from "./pages/PageB"
+// import PageB from "./pages/PageB"
 
 
 const App = () => {
@@ -12,7 +12,7 @@ const App = () => {
             <Router>
                 <Routes>
                     <Route path="/" element={<Home />} />
-                    <Route path="/pageb" element={<PageB />} />
+                    {/* <Route path="/pageb" element={<PageB />} /> */}
                 </Routes>
             </Router>
         </Provider>
