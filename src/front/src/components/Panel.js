@@ -1,7 +1,9 @@
 import React, {useEffect} from 'react'
 import { useDispatch, useSelector } from "react-redux"
-import { Analyse, Upload, UpdateUploadedAreaImage, TurnWebcamOn } from '../redux/actions';
+import { Analyse, Upload, UpdatePredictedLabels, TurnWebcamOn } from '../redux/actions';
 import { ChangeEvent, useState } from 'react';
+import axios from 'axios';
+import PredictedLabelsPanel from './PredictedLabelsPanel';
 
 const Panel = ({text}) => {
     // const [file, setFile] = useState();
@@ -9,11 +11,51 @@ const Panel = ({text}) => {
     const uploadedImage = useSelector(state => state.imageFile)
     const uploadedImageFileForDisplay = useSelector(state => state.imageFileForDisplay)
     const isWebcamOn = useSelector(state => state.isWebcamOn)
+    const predictedLabels = useSelector(state => state.predictedLabels)
+    const selectedObjectInImage = useSelector(state => state.selectedObjectInImage)
 
 
     // useEffect(() => {
     //     dispatch(UpdateUploadedAreaImage());
     // }, [])
+
+
+    const postImage = async(imageFile)=>{
+        const reader = new FileReader();
+        reader.readAsDataURL(imageFile)
+    
+        await axios
+        .post('http://localhost:5001/upload', imageFile, {
+            headers: {
+                'Content-Type': `application/json`,
+            },}
+            )
+        .then(async(res) => {
+            
+            console.log(res)
+            console.log("postImage action successful")
+
+            await axios.get('http://localhost:5001/upload').then(resp => {
+                console.log("============================")
+                console.log(resp.data)
+                dispatch(UpdatePredictedLabels(resp.data["predicted_labels"]))
+            })
+            .then((res)=> {
+                console.log("getDataFromBack action successful")
+                return res
+            })
+            .catch((error) => {
+                console.log("getDataFromBack action unsuccessful")
+                console.log(error.response);
+            });
+
+            
+        })
+        .catch((error) => {
+            console.log("postImage action unsuccessful")
+            console.log(error.response);
+        });  
+    }
 
 
     const handleButtonClick = (text)=>{
@@ -50,20 +92,43 @@ const Panel = ({text}) => {
                 <button onClick={()=>handleButtonClick(text)} type="button" className="btn text-light bg-dark d-flex justify-content-center align-items-center p-4 label-btn">Take a photo</button>
             </>
             }
-            {text === "Analyse" && 
+            {(text === "Analyse" && !predictedLabels) &&
             <>
                 <div className='row d-flex flex-column justify-content-center align-items-center'>
-                    <button onClick={()=>dispatch(Analyse(uploadedImage))} type="button" className="btn text-light bg-dark d-flex justify-content-center align-items-center p-4 label-btn">Analyse</button>
+                    <button onClick={()=>postImage(uploadedImage)} type="button" className="btn text-light bg-dark d-flex justify-content-center align-items-center p-4 label-btn">Analyse</button>
                 </div>
 
                 <div className='row d-flex flex-row justify-content-center align-items-center mt-3'>
-                        <div className='col-sm-12 d-flex justify-content-center align-items-center'>
-                            <img className="preview" src={uploadedImageFileForDisplay} alt="" />    
-                            {/* <img src="http://localhost:5001/image" /> */}
-                        </div>
-                        
+                        {!predictedLabels && 
+                            <div className='col-sm-12 d-flex justify-content-center align-items-center'>
+                                <img className="preview" src={uploadedImageFileForDisplay} alt="" />    
+                            </div>
+                        }
                 </div>
             </>
+            }
+
+            {predictedLabels && 
+                <div className='row d-flex justify-content-center align-items-centers'>
+                
+                    <h4 className='text-center'>We have detected multiple objects for segmentation as the following. Choose one of them and click segment button</h4>
+                    <div className='col-sm-10 d-flex flex-row justify-content-center align-items-center mt-3'>
+                        {/* <img className="preview" src={uploadedImageFileForDisplay} alt="" /> */}
+                        <img className="preview" src="http://localhost:5001/image" />
+                    </div>
+                    <div className='col-sm-2 d-flex flex-column justify-content-center'>
+                        <PredictedLabelsPanel predictedLabels={predictedLabels}/>
+                    </div>
+                    
+                    {!selectedObjectInImage &&
+                    <button onClick={()=>console.log("Segment button clicked")} type="button" className="btn text-light bg-dark d-flex justify-content-center align-items-center p-4 label-btn" disabled>Segment</button>
+                    }
+                    
+                    {selectedObjectInImage &&
+                    <button onClick={()=>console.log("Segment button clicked")} type="button" className="btn text-light bg-dark d-flex justify-content-center align-items-center p-4 label-btn">Segment</button>
+                    }
+                </div>
+
             }
             
         </>

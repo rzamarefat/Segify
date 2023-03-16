@@ -2,6 +2,7 @@ from ultralytics import YOLO
 from config import YOLO_WEIGHTS_PATH
 import numpy as np
 import cv2
+from random import randint
 
 class FaceSegmenter:
     def __init__(self):
@@ -15,10 +16,10 @@ class FaceSegmenter:
         result = self._yolo.predict(image)
 
         segmented_image = self._segment(image, result)
-        boxed_image = self._get_boxes(image, result)
+        boxed_image, generated_colors = self._get_boxes(image, result)
         predicted_labels = self._get_labels(result)
 
-        return segmented_image, boxed_image, predicted_labels
+        return segmented_image, boxed_image, predicted_labels, generated_colors
 
     def _get_labels(self, result):
         labels = []
@@ -40,14 +41,18 @@ class FaceSegmenter:
     
     def _get_boxes(self, img, results):
         boxes = results[0].boxes
-        for box in boxes:
+        generated_colors = []
+        for i in range(len(boxes)):
+            generated_colors.append((randint(50, 255),randint(50, 255),randint(50, 255)))
+
+        for box, color in zip(boxes, generated_colors):
             top_left_x = int(box.xyxy.tolist()[0][0])
             top_left_y = int(box.xyxy.tolist()[0][1])
             bottom_right_x = int(box.xyxy.tolist()[0][2])
             bottom_right_y = int(box.xyxy.tolist()[0][3])
-            cv2.rectangle(img, (top_left_x, top_left_y), (bottom_right_x, bottom_right_y), (50, 200, 129), 10)
+            cv2.rectangle(img, (top_left_x, top_left_y), (bottom_right_x, bottom_right_y), color, 3)
 
-        return img
+        return img, generated_colors
 
     def _apply_mask(self, image, mask):
         # print("image.shape", image.shape)

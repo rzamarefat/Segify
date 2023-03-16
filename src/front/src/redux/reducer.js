@@ -1,5 +1,5 @@
 import initialState from "./initiaState"
-import { UPLOAD, ANALYSE, TURN_ON_WEBCAM } from "./actionTypes";
+import { UPLOAD, ANALYSE, TURN_ON_WEBCAM, UPADTE_PREDICTED_LABELS, SELECT_OBJECT } from "./actionTypes";
 
 
 const reducer = (state = initialState, action) => {
@@ -20,6 +20,18 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 isWebcamOn: true,
+            }
+
+        case UPADTE_PREDICTED_LABELS:
+            return {
+                ...state,
+                predictedLabels: action.payload
+            }
+
+        case SELECT_OBJECT:
+            return {
+                ...state,
+                selectedObjectInImage: action.payload
             }
 
         default:

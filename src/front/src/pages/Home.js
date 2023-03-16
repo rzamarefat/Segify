@@ -18,8 +18,10 @@ const Home = () => {
                         <div className='p-5'>
                             <div className='d-flex align-items-center justify-content-center flex-column'>
                                 <h1 className='display-1'>Segify</h1>
-                                <h4 className='display-6 mt-5 text-center'>A tool for segmenting objects in images instantly</h4>
+                                <h2 className=' mt-5 text-center'>A YOLO-basd tool for segmenting objects in images instantly</h2>
+                                
                             </div>
+                            <hr className='mt-3'/>
                             <div>
                                 {(!uploadedImageFileForDisplay && !isWebcamOn)? <Panel text="Upload an image"/>: <></>}
                                 {(!uploadedImageFileForDisplay && !isWebcamOn)? <Panel text="Take a photo"/>: <></>}
