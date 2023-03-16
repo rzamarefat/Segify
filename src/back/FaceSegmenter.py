@@ -35,21 +35,21 @@ class FaceSegmenter:
 
     def _segment(self, img, results):
         print("len(results[0].masks)", len(results[0].masks))
-        mask = results[0].masks.masks.data.permute(1,2, 0).numpy()
-        print("mask.shape", mask.shape)
+        masks = results[0].masks.masks.data.permute(1,2, 0).numpy()
+        print("masks.shape", masks.shape)
         # torch.unsqueeze()
-        segmented_images = []
-        for m in results[0].masks:
-            print("m.shape",m.shape)
-            m = torch.unsqueeze(m, 2)
-            print("m.shape",m.shape)
-            mask = m.masks.data.permute(0,2).numpy()
-            print("DDDDDDDDDDDDDDDONEEEEEEEEEE")
-            # segmented_image = self._apply_mask(img, mask)
-            segmented_images.append(self._apply_mask(img, mask))
+        # segmented_images = []
+        # for m in results[0].masks:
+        #     print("m.shape",m.shape)
+        #     m = torch.unsqueeze(m, 2)
+        #     print("m.shape",m.shape)
+        #     mask = m.masks.data.permute(0,2).numpy()
+        #     print("DDDDDDDDDDDDDDDONEEEEEEEEEE")
+        #     # segmented_image = self._apply_mask(img, mask)
+        #     segmented_images.append(self._apply_mask(img, mask))
 
         
-        # segmented_images = self._apply_mask(img, mask)
+        segmented_images = self._apply_mask(img, masks)
         return segmented_images
 
 
@@ -85,30 +85,39 @@ class FaceSegmenter:
 
         return img, id_holder
 
-    def _apply_mask(self, image, mask):
-        # print("image.shape", image.shape)
-        # print
-        image = cv2.resize(image, (mask.shape[1], mask.shape[0]))
-        for h in range(len(image)):
-            for w in range(mask.shape[1]):
-                if mask[h][w][0] == 0:
-                    for i in range(3):
-                        image[h][w][i] = 0
-                else:
-                    continue
+    def _apply_mask(self, image, masks):
+        segmented_images = []
         
-        return image
+        for mask_idx in range(masks.shape[2]):
+            for_masking_image = image.copy() 
+            for_masking_image = cv2.resize(for_masking_image, (masks.shape[1], masks.shape[0]))
+
+            for h in range(len(for_masking_image)):
+                for w in range(masks.shape[1]):
+                    if masks[h][w][mask_idx] == 0:
+                        for i in range(3):
+                            for_masking_image[h][w][i] = 0
+                    else:
+                        continue
+            print("for_masking_image.shape", for_masking_image.shape)
+            segmented_images.append(for_masking_image)
+            
+        return segmented_images
 
 
         
 if __name__ == "__main__":
     import cv2
     fs = FaceSegmenter()
-    img = cv2.imread("/home/rzamarefat/projects/github_projects/StyleMe/src/back/assets/girl_car.png")
-    segmented_image, boxed_image = fs.analyse(img)
+    img = cv2.imread("/home/rzamarefat/projects/github_projects/StyleMe/src/back/assets/uploaded_img.jpg")
+    segmented_images, boxed_image, predicted_labels, id_holder = fs.analyse(img)
 
-    cv2.imwrite("./segmented.png", segmented_image)
-    cv2.imwrite("./boxed.png", boxed_image)
+
+
+    for idx, s in enumerate(segmented_images):
+        cv2.imwrite(f"/home/rzamarefat/projects/github_projects/StyleMe/src/back/assets/{idx}.png", s)
+
+    # cv2.imwrite("./boxed.png", boxed_image)
     
 
     

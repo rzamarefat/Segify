@@ -65,7 +65,7 @@ class UploadImage(Resource):
                 print("???????????????????")
                 print(name_of_image)
                 print("???????????????????")
-                cv2.imwrite(os.path.join(ROOT_PATH_TO_SAVE_ASSESTS, name_of_image), segmented_images)
+                cv2.imwrite(os.path.join(ROOT_PATH_TO_SAVE_ASSESTS, name_of_image), s)
 
             # name_of_image = "ssssssss.jpg"
             # cv2.imwrite(os.path.join(ROOT_PATH_TO_SAVE_ASSESTS, name_of_image), segmented_images)
