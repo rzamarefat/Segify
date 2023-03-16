@@ -112,14 +112,26 @@ const Panel = ({text}) => {
                 <div className='row d-flex justify-content-center align-items-centers'>
                 
                     <h4 className='text-center'>We have detected multiple objects for segmentation as the following. Choose one of them and click segment button</h4>
-                    <div className='col-sm-10 d-flex flex-row justify-content-center align-items-center mt-3'>
+                    
+                    <div className='col-sm-2 d-flex flex-row justify-content-center'>
+                        <PredictedLabelsPanel predictedLabels={predictedLabels}/>
+                    </div>
+
+                    <div className='col-sm-12 d-flex flex-row justify-content-center align-items-center mt-3'>
                         {/* <img className="preview" src={uploadedImageFileForDisplay} alt="" /> */}
                         <img className="preview" src="http://localhost:5001/image" />
                     </div>
-                    <div className='col-sm-2 d-flex flex-column justify-content-center'>
-                        <PredictedLabelsPanel predictedLabels={predictedLabels}/>
-                    </div>
                     
+                    
+
+
+
+
+
+
+
+
+
                     {!selectedObjectInImage &&
                     <button onClick={()=>console.log("Segment button clicked")} type="button" className="btn text-light bg-dark d-flex justify-content-center align-items-center p-4 label-btn" disabled>Segment</button>
                     }

@@ -43,22 +43,33 @@ class UploadImage(Resource):
             cv2.imwrite(os.path.join(ROOT_PATH_TO_SAVE_ASSESTS, "uploaded_img.jpg"), decoded)
 
             # segmented = fs.segment(decoded)
-            segmented_image, boxed_image, predicted_labels, generated_colors = fs.analyse(decoded)
+            # segmented_image, boxed_image, predicted_labels, generated_colors = fs.analyse(decoded)
+            segmented_images, boxed_image, predicted_labels, id_holder = fs.analyse(decoded)
 
 
 
             label_data = {}
-            print(predicted_labels)
-            print(generated_colors)
-            for pred, gc in zip(predicted_labels, generated_colors):
-                label_data[f"{pred}__{str(uuid1())[0:8]}"] = gc
+            for pred, id_ in zip(predicted_labels, id_holder):
+                label_data[f"{pred}__{id_}"] = id_
 
-            print(label_data)
+            
 
             with open(os.path.join(ROOT_PATH_TO_SAVE_ASSESTS, "predicted_labels.json"), 'w') as f:
                 json.dump(label_data, f, indent=2)
+            
+            print(len(predicted_labels))
+            print(len(id_holder))
+            print(len(segmented_images))
+            for s, pred, id_ in zip(segmented_images, predicted_labels, id_holder):
+                name_of_image = f"segmented__{pred}__{id_}.jpg"
+                print("???????????????????")
+                print(name_of_image)
+                print("???????????????????")
+                cv2.imwrite(os.path.join(ROOT_PATH_TO_SAVE_ASSESTS, name_of_image), segmented_images)
 
-            cv2.imwrite(os.path.join(ROOT_PATH_TO_SAVE_ASSESTS, "segmented.jpg"), segmented_image)
+            # name_of_image = "ssssssss.jpg"
+            # cv2.imwrite(os.path.join(ROOT_PATH_TO_SAVE_ASSESTS, name_of_image), segmented_images)
+
             cv2.imwrite(os.path.join(ROOT_PATH_TO_SAVE_ASSESTS, "boxed.jpg"), boxed_image)
 
         except Exception as e:
@@ -78,10 +89,18 @@ class ImagePage(Resource):
             return None
         
         return send_file(os.path.join(ROOT_PATH_TO_SAVE_ASSESTS, "boxed.jpg"),  mimetype='image/jpg')
+
+class SegmentedImagePage(Resource):
+    def get(self):
+        if not(os.path.isfile(os.path.join(ROOT_PATH_TO_SAVE_ASSESTS, "uploaded_img.jpg"))):
+            return None
+        
+        return send_file(os.path.join(ROOT_PATH_TO_SAVE_ASSESTS, "boxed.jpg"),  mimetype='image/jpg')
   
 api.add_resource(Home,'/')
 api.add_resource(UploadImage,'/upload')
 api.add_resource(ImagePage,'/image')
+api.add_resource(SegmentedImagePage,'/segmented-image')
   
   
 if __name__=='__main__':

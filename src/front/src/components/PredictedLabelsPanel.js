@@ -18,7 +18,7 @@ const PredictedLabelsPanel = ({predictedLabels}) => {
   return (
     <>  
       {Object.entries(predictedLabels).map(l => {
-        let color = 'rgb(' + l[1].join(', ') + ')'
+        let color = (255,255,255)//l[1]
         return (
             <div>
               <div className="p-2">
@@ -27,15 +27,19 @@ const PredictedLabelsPanel = ({predictedLabels}) => {
                     ? 
                     {backgroundColor: color, cursor: "pointer", border: "2px solid"}
                     :
-                    {backgroundColor: color, cursor: "pointer"}
+                    {backgroundColor: color, cursor: "pointer", border: "2px solid #D3D3D3"}
                   }
-                  className="p-2 d-flex justify-content-center align-items-center"
+                  className="p-4 d-flex flex-row justify-content-center align-items-center  rounded-circle"
                   onClick={() => handlePredictedObjectClick(l[0])}
                   >
-                    <h3>
+                    <h4>
                       {l[0].split("__")[0]}
-                    </h3>
-                </div>
+                    </h4>
+                    <h4>:</h4>
+                    <h4>
+                      {l[1]}
+                    </h4>
+                  </div>
               </div>
             </div>
             
