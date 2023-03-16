@@ -4,6 +4,7 @@ const initialState = {
     "isWebcamOn": false,
     "predictedLabels": null,
     "selectedObjectInImage": null,
+    "isSegmentShown": false,
     
     
 

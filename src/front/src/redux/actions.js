@@ -1,4 +1,4 @@
-import {UPLOAD, ANALYSE, TURN_ON_WEBCAM, UPADTE_PREDICTED_LABELS, SELECT_OBJECT} from './actionTypes'
+import {UPLOAD, ANALYSE, TURN_ON_WEBCAM, UPADTE_PREDICTED_LABELS, SELECT_OBJECT, TURN_ON_SEGMENT_DISPLAY} from './actionTypes'
 import initialState from './initiaState'
 import axios from 'axios';
 import { useDispatch, useSelector } from "react-redux"
@@ -9,6 +9,12 @@ export const UpdatePredictedLabels = (labels)=>{
         payload: labels
     }
 
+}
+
+export const turnOnSegmentedImageArea = () => {
+    return {
+        type: TURN_ON_SEGMENT_DISPLAY,
+    }
 }
 
 

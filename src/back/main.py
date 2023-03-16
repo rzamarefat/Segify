@@ -62,13 +62,8 @@ class UploadImage(Resource):
             print(len(segmented_images))
             for s, pred, id_ in zip(segmented_images, predicted_labels, id_holder):
                 name_of_image = f"segmented__{pred}__{id_}.jpg"
-                print("???????????????????")
-                print(name_of_image)
-                print("???????????????????")
                 cv2.imwrite(os.path.join(ROOT_PATH_TO_SAVE_ASSESTS, name_of_image), s)
 
-            # name_of_image = "ssssssss.jpg"
-            # cv2.imwrite(os.path.join(ROOT_PATH_TO_SAVE_ASSESTS, name_of_image), segmented_images)
 
             cv2.imwrite(os.path.join(ROOT_PATH_TO_SAVE_ASSESTS, "boxed.jpg"), boxed_image)
 
@@ -91,11 +86,24 @@ class ImagePage(Resource):
         return send_file(os.path.join(ROOT_PATH_TO_SAVE_ASSESTS, "boxed.jpg"),  mimetype='image/jpg')
 
 class SegmentedImagePage(Resource):
-    def get(self):
-        if not(os.path.isfile(os.path.join(ROOT_PATH_TO_SAVE_ASSESTS, "uploaded_img.jpg"))):
-            return None
+    def post(self):
+        print("request inside segmented page", request.data)
+        data = json.loads(request.data.decode())
+
+        with open(os.path.join(ROOT_PATH_TO_SAVE_ASSESTS, "selected_object_from_image.json"), 'w') as f:
+            json.dump(data["segmented"]["image"], f, indent=2)
         
-        return send_file(os.path.join(ROOT_PATH_TO_SAVE_ASSESTS, "boxed.jpg"),  mimetype='image/jpg')
+        return None
+
+    def get(self):
+        
+        with open(os.path.join(ROOT_PATH_TO_SAVE_ASSESTS, "selected_object_from_image.json"), 'r') as f:
+            selected_object = json.load(f)
+
+        print("iside get of segmented")
+        print(selected_object)
+        print(type(selected_object))
+        return send_file(os.path.join(ROOT_PATH_TO_SAVE_ASSESTS, f"segmented__{selected_object['id']}.jpg"),  mimetype='image/jpg')
   
 api.add_resource(Home,'/')
 api.add_resource(UploadImage,'/upload')

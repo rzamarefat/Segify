@@ -1,5 +1,5 @@
 import initialState from "./initiaState"
-import { UPLOAD, ANALYSE, TURN_ON_WEBCAM, UPADTE_PREDICTED_LABELS, SELECT_OBJECT } from "./actionTypes";
+import { UPLOAD, ANALYSE, TURN_ON_WEBCAM, UPADTE_PREDICTED_LABELS, SELECT_OBJECT, TURN_ON_SEGMENT_DISPLAY } from "./actionTypes";
 
 
 const reducer = (state = initialState, action) => {
@@ -32,6 +32,12 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 selectedObjectInImage: action.payload
+            }
+
+        case TURN_ON_SEGMENT_DISPLAY:
+            return {
+                ...state,
+                isSegmentShown: true
             }
 
         default:

@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react'
 import { useDispatch, useSelector } from "react-redux"
-import { Analyse, Upload, UpdatePredictedLabels, TurnWebcamOn } from '../redux/actions';
+import { Analyse, Upload, UpdatePredictedLabels, TurnWebcamOn, turnOnSegmentedImageArea } from '../redux/actions';
 import { ChangeEvent, useState } from 'react';
 import axios from 'axios';
 import PredictedLabelsPanel from './PredictedLabelsPanel';
@@ -13,6 +13,7 @@ const Panel = ({text}) => {
     const isWebcamOn = useSelector(state => state.isWebcamOn)
     const predictedLabels = useSelector(state => state.predictedLabels)
     const selectedObjectInImage = useSelector(state => state.selectedObjectInImage)
+    const isSegmentShown = useSelector(state => state.isSegmentShown)
 
 
     // useEffect(() => {
@@ -76,6 +77,40 @@ const Panel = ({text}) => {
         }
           
          };
+        
+        
+    const handleSegment = async() => {
+        const data = new FormData();
+        data.append("segmented-image-id", selectedObjectInImage)
+        await axios.post('http://localhost:5001/segmented-image', data, {
+            headers: {
+                'Content-Type': `application/json`,
+            }})
+            .then(async(res) => {
+            
+                console.log(res)
+                console.log("handleSegment action successful")
+    
+                await axios.get('http://localhost:5001/segmented-image').then(resp => {
+                    console.log(resp.data)
+                })
+                .then((res)=> {
+                    console.log("fetch segmented image from back action successful")
+                    dispatch(turnOnSegmentedImageArea())
+                    return res
+                })
+                .catch((error) => {
+                    console.log("fetch segmented image from back action unsuccessful")
+                    console.log(error.response);
+                });
+    
+                
+            })
+            .catch((error) => {
+                console.log("handleSegment action unsuccessful")
+                console.log(error.response);
+            });
+    }
 
   return (
         <>
@@ -108,7 +143,8 @@ const Panel = ({text}) => {
             </>
             }
 
-            {predictedLabels && 
+
+            {(predictedLabels && !isSegmentShown) &&
                 <div className='row d-flex justify-content-center align-items-centers'>
                 
                     <h4 className='text-center'>We have detected multiple objects for segmentation as the following. Choose one of them and click segment button</h4>
@@ -124,24 +160,23 @@ const Panel = ({text}) => {
                     
                     
 
-
-
-
-
-
-
-
-
                     {!selectedObjectInImage &&
                     <button onClick={()=>console.log("Segment button clicked")} type="button" className="btn text-light bg-dark d-flex justify-content-center align-items-center p-4 label-btn" disabled>Segment</button>
                     }
                     
                     {selectedObjectInImage &&
-                    <button onClick={()=>console.log("Segment button clicked")} type="button" className="btn text-light bg-dark d-flex justify-content-center align-items-center p-4 label-btn">Segment</button>
+                    <button onClick={()=>handleSegment()} type="button" className="btn text-light bg-dark d-flex justify-content-center align-items-center p-4 label-btn">Segment</button>
                     }
                 </div>
-
             }
+            {isSegmentShown &&
+                <div className='col-sm-12 d-flex flex-row justify-content-center align-items-center mt-3'>
+                
+                <img className="preview" src="http://localhost:5001/segmented-image" />
+                </div>
+                
+            }
+
             
         </>
         
