@@ -1,9 +1,10 @@
 import React, {useEffect} from 'react'
 import { useDispatch, useSelector } from "react-redux"
-import { Analyse, Upload, UpdatePredictedLabels, TurnWebcamOn, turnOnSegmentedImageArea } from '../redux/actions';
+import { Analyse, Upload, UpdatePredictedLabels, TurnWebcamOn, turnOnSegmentedImageArea, switchLoaderOnOff } from '../redux/actions';
 import { ChangeEvent, useState } from 'react';
 import axios from 'axios';
 import PredictedLabelsPanel from './PredictedLabelsPanel';
+import Loader from './Loader';
 
 const Panel = ({text}) => {
     // const [file, setFile] = useState();
@@ -14,6 +15,7 @@ const Panel = ({text}) => {
     const predictedLabels = useSelector(state => state.predictedLabels)
     const selectedObjectInImage = useSelector(state => state.selectedObjectInImage)
     const isSegmentShown = useSelector(state => state.isSegmentShown)
+    const loaderDisplayState = useSelector(state => state.loaderDisplayState)
 
 
     // useEffect(() => {
@@ -24,6 +26,8 @@ const Panel = ({text}) => {
     const postImage = async(imageFile)=>{
         const reader = new FileReader();
         reader.readAsDataURL(imageFile)
+ 
+        dispatch(switchLoaderOnOff())
     
         await axios
         .post('http://localhost:5001/upload', imageFile, {
@@ -43,10 +47,12 @@ const Panel = ({text}) => {
             })
             .then((res)=> {
                 console.log("getDataFromBack action successful")
+                dispatch(switchLoaderOnOff())
                 return res
             })
             .catch((error) => {
                 console.log("getDataFromBack action unsuccessful")
+                dispatch(switchLoaderOnOff())
                 console.log(error.response);
             });
 
@@ -58,27 +64,6 @@ const Panel = ({text}) => {
         });  
     }
 
-
-    const handleButtonClick = (text)=>{
-        if (text == "Upload an image"){
-            console.log("1")
-            console.log(text)
-        }else if (text == "Take a photo"){
-            console.log("2")
-            console.log(text)
-            dispatch(TurnWebcamOn())
-        }
-            
-    }
-
-    const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files) {
-            dispatch(Upload(e.target.files[0]))
-        }
-          
-         };
-        
-        
     const handleSegment = async() => {
         const data = new FormData();
         data.append("segmented-image-id", selectedObjectInImage)
@@ -111,6 +96,28 @@ const Panel = ({text}) => {
                 console.log(error.response);
             });
     }
+    
+    const handleButtonClick = (text)=>{
+        if (text == "Upload an image"){
+            console.log("1")
+            console.log(text)
+        }else if (text == "Take a photo"){
+            console.log("2")
+            console.log(text)
+            dispatch(TurnWebcamOn())
+        }
+            
+    }
+
+    const handleFileChange = (e) => {
+        if (e.target.files) {
+            dispatch(Upload(e.target.files[0]))
+        }
+          
+         };
+        
+        
+    
 
   return (
         <>
@@ -128,9 +135,12 @@ const Panel = ({text}) => {
             </>
             }
             {(text === "Analyse" && !predictedLabels) &&
-            <>
+            <>  
+                
                 <div className='row d-flex flex-column justify-content-center align-items-center'>
-                    <button onClick={()=>postImage(uploadedImage)} type="button" className="btn text-light bg-dark d-flex justify-content-center align-items-center p-4 label-btn">Analyse</button>
+                    {loaderDisplayState && <Loader/>}
+
+                    {!loaderDisplayState && <button onClick={()=>postImage(uploadedImage)} type="button" className="btn text-light bg-dark d-flex justify-content-center align-items-center p-4 label-btn">Analyse</button>}
                 </div>
 
                 <div className='row d-flex flex-row justify-content-center align-items-center mt-3'>

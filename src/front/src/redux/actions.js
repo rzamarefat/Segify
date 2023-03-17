@@ -1,4 +1,4 @@
-import {UPLOAD, ANALYSE, TURN_ON_WEBCAM, UPADTE_PREDICTED_LABELS, SELECT_OBJECT, TURN_ON_SEGMENT_DISPLAY} from './actionTypes'
+import {UPLOAD, ANALYSE, TURN_ON_WEBCAM, UPADTE_PREDICTED_LABELS, SELECT_OBJECT, TURN_ON_SEGMENT_DISPLAY, SWITCH_LOADER_ON_OFF} from './actionTypes'
 import initialState from './initiaState'
 import axios from 'axios';
 import { useDispatch, useSelector } from "react-redux"
@@ -10,7 +10,11 @@ export const UpdatePredictedLabels = (labels)=>{
     }
 
 }
-
+export const switchLoaderOnOff = () => {
+    return {
+        type: SWITCH_LOADER_ON_OFF,
+    }
+}
 export const turnOnSegmentedImageArea = () => {
     return {
         type: TURN_ON_SEGMENT_DISPLAY,
@@ -72,11 +76,6 @@ export const Analyse = (imageFile) => {
     
     postImage(imageFile)
 
-    console.log("))))))))))))))))))))")
-    
-
-    
-    
     return {
         type: ANALYSE,
     }

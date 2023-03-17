@@ -5,22 +5,17 @@ import cv2
 from random import choice
 import torch
 
-class FaceSegmenter:
+class Segmenter:
     def __init__(self):
         self._yolo_pretrained_weights = YOLO_WEIGHTS_PATH
         self._yolo = YOLO(self._yolo_pretrained_weights)
 
     def analyse(self, image: np.array):
-        # if isinstance(image, np.array):
-        #     raise TypeError("The image given for segmentation is not a numpy array.")
         
         result = self._yolo.predict(image)
         
-
-        
-        print("========================================================================")
         segmented_images = self._segment(image, result)
-        print("**********************************************************************")
+        
         boxed_image, id_holder = self._get_boxes(image, result)
         predicted_labels = self._get_labels(result)
 
@@ -37,16 +32,6 @@ class FaceSegmenter:
         print("len(results[0].masks)", len(results[0].masks))
         masks = results[0].masks.masks.data.permute(1,2, 0).numpy()
         print("masks.shape", masks.shape)
-        # torch.unsqueeze()
-        # segmented_images = []
-        # for m in results[0].masks:
-        #     print("m.shape",m.shape)
-        #     m = torch.unsqueeze(m, 2)
-        #     print("m.shape",m.shape)
-        #     mask = m.masks.data.permute(0,2).numpy()
-        #     print("DDDDDDDDDDDDDDDONEEEEEEEEEE")
-        #     # segmented_image = self._apply_mask(img, mask)
-        #     segmented_images.append(self._apply_mask(img, mask))
 
         
         segmented_images = self._apply_mask(img, masks)
@@ -66,12 +51,9 @@ class FaceSegmenter:
         hex_colors = ["#"+''.join([choice('0123456789ABCDEF') for j in range(6)])
                 for i in range(len(boxes))]
         
-        # converted_colors = self._convert_hex_to_rgb(hex_colors)
-
-        # for box, color in zip(boxes, converted_colors):
         id_holder = []
         for idx, box in enumerate(boxes):
-            color = (80, 55, 91)
+            color = (140, 200, 255)
             
             id_holder.append(idx)
             top_left_x = int(box.xyxy.tolist()[0][0])
@@ -108,16 +90,14 @@ class FaceSegmenter:
         
 if __name__ == "__main__":
     import cv2
-    fs = FaceSegmenter()
+    segmenter = Segmenter()
     img = cv2.imread("/home/rzamarefat/projects/github_projects/StyleMe/src/back/assets/uploaded_img.jpg")
-    segmented_images, boxed_image, predicted_labels, id_holder = fs.analyse(img)
+    segmented_images, boxed_image, predicted_labels, id_holder = segmenter.analyse(img)
 
 
 
     for idx, s in enumerate(segmented_images):
         cv2.imwrite(f"/home/rzamarefat/projects/github_projects/StyleMe/src/back/assets/{idx}.png", s)
-
-    # cv2.imwrite("./boxed.png", boxed_image)
     
 
     

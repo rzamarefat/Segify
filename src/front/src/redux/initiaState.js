@@ -5,7 +5,8 @@ const initialState = {
     "predictedLabels": null,
     "selectedObjectInImage": null,
     "isSegmentShown": false,
-    
+    "loaderDisplayState": false,
+
     
 
     

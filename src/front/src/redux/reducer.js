@@ -1,5 +1,5 @@
 import initialState from "./initiaState"
-import { UPLOAD, ANALYSE, TURN_ON_WEBCAM, UPADTE_PREDICTED_LABELS, SELECT_OBJECT, TURN_ON_SEGMENT_DISPLAY } from "./actionTypes";
+import { UPLOAD, ANALYSE, TURN_ON_WEBCAM, UPADTE_PREDICTED_LABELS, SELECT_OBJECT, TURN_ON_SEGMENT_DISPLAY, SWITCH_LOADER_ON_OFF } from "./actionTypes";
 
 
 const reducer = (state = initialState, action) => {
@@ -38,6 +38,11 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 isSegmentShown: true
+            }
+        case SWITCH_LOADER_ON_OFF:
+            return {
+                ...state,
+                loaderDisplayState: !state.loaderDisplayState
             }
 
         default:

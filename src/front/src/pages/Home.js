@@ -1,7 +1,6 @@
 import Navbar from '../components/Navbar'
 import Panel from '../components/Panel'
 import WebCam from '../components/WebCam'
-import Profile from '../components/Profile'
 import { useDispatch, useSelector } from "react-redux"
 
 const Home = () => {
