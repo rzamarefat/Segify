@@ -1,5 +1,5 @@
 import initialState from "./initiaState"
-import { UPLOAD, ANALYSE, TURN_ON_WEBCAM, UPADTE_PREDICTED_LABELS, SELECT_OBJECT, TURN_ON_SEGMENT_DISPLAY, SWITCH_LOADER_ON_OFF } from "./actionTypes";
+import { UPLOAD, ANALYSE, TURN_ON_WEBCAM, UPADTE_PREDICTED_LABELS, SELECT_OBJECT, TURN_ON_SEGMENT_DISPLAY, SWITCH_LOADER_ON_OFF, CAPTURE } from "./actionTypes";
 
 
 const reducer = (state = initialState, action) => {
@@ -43,6 +43,12 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 loaderDisplayState: !state.loaderDisplayState
+            }
+
+        case CAPTURE:
+            return {
+                ...state,
+                webcamPicture: action.payload
             }
 
         default:

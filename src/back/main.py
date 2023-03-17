@@ -67,9 +67,6 @@ class UploadImage(Resource):
             print("88888888888888888888888888888888888888888888888888888")
             
             
-            
-            
-
             segmented_images, boxed_image, predicted_labels, id_holder = fs.analyse(decoded)
 
             label_data = {}

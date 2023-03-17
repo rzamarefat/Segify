@@ -1,6 +1,9 @@
 import React, { useState } from 'react'
+import { useDispatch, useSelector } from "react-redux"
 import Webcam from 'react-webcam'
 import axios from 'axios';
+import { doCapture, UpdatePredictedLabels } from '../redux/actions';
+import PredictedLabelsPanel from './PredictedLabelsPanel';
 
 
 const WebcamComponent = () => <Webcam />
@@ -14,10 +17,20 @@ const videoConstraints = {
 
 const Profile = () => {
   const [picture, setPicture] = useState('')
+  const dispatch = useDispatch()
+
+  
+  const predictedLabels = useSelector(state => state.predictedLabels)
+  const isSegmentShown = useSelector(state => state.isSegmentShown)
+
+  const webcamPicture = useSelector(state => state.webcamPicture)
   const webcamRef = React.useRef(null)
+
   const capture = React.useCallback(() => {
-  const pictureSrc = webcamRef.current.getScreenshot()
-    setPicture(pictureSrc)
+    console.log("-----------------------------------------")
+    const pictureSrc = webcamRef.current.getScreenshot()
+    dispatch(doCapture(pictureSrc))
+    console.log("-----------------------------------------")
   })
 
 
@@ -39,7 +52,7 @@ const Profile = () => {
             await axios.get('http://localhost:5001/upload').then(resp => {
                 console.log("============================")
                 console.log(resp.data)
-                // dispatch(UpdatePredictedLabels(resp.data["predicted_labels"]))
+                dispatch(UpdatePredictedLabels(resp.data["predicted_labels"]))
             })
             .then((res)=> {
                 console.log("getDataFromBack action successful")
@@ -51,8 +64,6 @@ const Profile = () => {
                 // dispatch(switchLoaderOnOff())
                 console.log(error.response);
             });
-
-            
         })
         .catch((error) => {
             console.log("postImage action unsuccessful")
@@ -66,10 +77,42 @@ const Profile = () => {
   return (
     <div>
       <div className='row d-flex flex-column justify-content-center align-items-center'>
-      </div>
+      </div>        
+        <div>
+          {webcamPicture != '' ? (
+            <>
+              {!predictedLabels &&
+                <button onClick={() => postCapture(webcamPicture)} type="button" className="btn text-light bg-dark d-flex justify-content-center align-items-center p-4 label-btn">Analyse</button>}
+              {predictedLabels &&
+                <>
+                  <div className='col-sm-2 d-flex flex-row justify-content-center'>
+                            <PredictedLabelsPanel predictedLabels={predictedLabels}/>
+                  </div>
+                  <button onClick={() => console.log("segment")} type="button" className="btn text-light bg-dark d-flex justify-content-center align-items-center p-4 label-btn">Segment</button>
+                </>
+              }
+            </>
+            
+          ) : (
+            <button onClick={(e) => {
+              e.preventDefault()
+              capture()
+            }} type="button" className="btn text-light bg-dark d-flex justify-content-center align-items-center p-4 label-btn">Capture</button> 
+          )}
+
+            {(predictedLabels && isSegmentShown) && 
+            <div className='col-sm-12 d-flex flex-row justify-content-center align-items-center mt-3'>
+            <img className="preview" src="http://localhost:5001/segmented-image" />
+            </div>
+
+            }
+
+        </div>
+
+
         <div className="row  d-flex justify-content-center align-items-center">
           <div className='col-sm-6 d-flex justify-content-center align-items-center'>
-                                {picture == '' ? (
+                                {webcamPicture == '' ? (
                                 <Webcam
                                   audio={false}
                                   height={500}
@@ -79,23 +122,11 @@ const Profile = () => {
                                   videoConstraints={videoConstraints}
                                 />
                               ) : (
-                                <img src={picture} />
+                                <img src={webcamPicture} />
                               )}
           </div>
 
         </div>
-        
-      <div>
-        {picture != '' ? (
-          <button onClick={() => postCapture(picture)} type="button" className="btn text-light bg-dark d-flex justify-content-center align-items-center p-4 label-btn">Analyse</button>
-          
-        ) : (
-          <button onClick={(e) => {
-            e.preventDefault()
-            capture()
-          }} type="button" className="btn text-light bg-dark d-flex justify-content-center align-items-center p-4 label-btn">Capture</button> 
-        )}
-      </div>
     </div>
   )
 }

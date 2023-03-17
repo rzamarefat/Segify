@@ -1,4 +1,4 @@
-import {UPLOAD, ANALYSE, TURN_ON_WEBCAM, UPADTE_PREDICTED_LABELS, SELECT_OBJECT, TURN_ON_SEGMENT_DISPLAY, SWITCH_LOADER_ON_OFF} from './actionTypes'
+import {UPLOAD, ANALYSE, TURN_ON_WEBCAM, UPADTE_PREDICTED_LABELS, SELECT_OBJECT, TURN_ON_SEGMENT_DISPLAY, SWITCH_LOADER_ON_OFF, CAPTURE} from './actionTypes'
 import initialState from './initiaState'
 import axios from 'axios';
 import { useDispatch, useSelector } from "react-redux"
@@ -9,6 +9,12 @@ export const UpdatePredictedLabels = (labels)=>{
         payload: labels
     }
 
+}
+export const doCapture = (picture) => {
+    return {
+        type: CAPTURE,
+        payload: picture,
+    }
 }
 export const switchLoaderOnOff = () => {
     return {
