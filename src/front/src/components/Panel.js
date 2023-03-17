@@ -24,9 +24,11 @@ const Panel = ({text}) => {
 
 
     const postImage = async(imageFile)=>{
+
+
         const reader = new FileReader();
         reader.readAsDataURL(imageFile)
- 
+
         dispatch(switchLoaderOnOff())
     
         await axios

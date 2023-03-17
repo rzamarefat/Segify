@@ -2,4 +2,5 @@
 /src/back/__pycache__
 *.png
 *.jpg
+*.jpeg
 src/back/assets/*

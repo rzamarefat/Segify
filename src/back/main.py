@@ -11,6 +11,8 @@ import base64
 from config import *
 import json
 from uuid import uuid1
+from PIL import Image
+import re
   
 app =   Flask(__name__)
 app.config['CORS_HEADERS'] = 'Content-Type'
@@ -30,10 +32,30 @@ class UploadImage(Resource):
         return {
             "predicted_labels": predicted_labels
         }
+    
+    def likeBase64(s:str) -> bool:
+        
+        return 
 
     def post(self):
+        
+
         try:
-            decoded = cv2.imdecode(np.frombuffer(request.data, np.uint8), -1)            
+            s = request.get_data(request.data, as_text=True).replace("data:image/jpeg;base64,", "")
+            
+            print("88888888888888888888888888888888888888888888888888888")
+
+            print("88888888888888888888888888888888888888888888888888888")
+
+            # decoded = cv2.imdecode(np.frombuffer(request.data, np.uint8), -1)            
+
+            
+            img = Image.open(io.BytesIO(base64.b64decode(s)))
+            
+            print(img.save("TTTTT.jpeg"))
+            
+            
+            # print("decoded.shape", decoded.shape)
             
             if os.path.isfile(os.path.join(ROOT_PATH_TO_SAVE_ASSESTS, "uploaded_img.jpg")):
                 os.remove(os.path.join(ROOT_PATH_TO_SAVE_ASSESTS, "uploaded_img.jpg"))
