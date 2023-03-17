@@ -41,26 +41,34 @@ class UploadImage(Resource):
         
 
         try:
-            s = request.get_data(request.data, as_text=True).replace("data:image/jpeg;base64,", "")
-            
             print("88888888888888888888888888888888888888888888888888888")
+            try:
+                decoded = cv2.imdecode(np.frombuffer(request.data, np.uint8), -1)
+                if os.path.isfile(os.path.join(ROOT_PATH_TO_SAVE_ASSESTS, "uploaded_img.jpg")):
+                    os.remove(os.path.join(ROOT_PATH_TO_SAVE_ASSESTS, "uploaded_img.jpg"))
+                cv2.imwrite(os.path.join(ROOT_PATH_TO_SAVE_ASSESTS, "uploaded_img.jpg"), decoded)
 
+            except Exception as e:
+                print("Error in upload style data deliver")
+                print(e)
+
+                try: 
+                    s = request.get_data(request.data, as_text=True).replace("data:image/jpeg;base64,", "")
+                    img = Image.open(io.BytesIO(base64.b64decode(s)))
+
+                    if os.path.isfile(os.path.join(ROOT_PATH_TO_SAVE_ASSESTS, "uploaded_img.jpg")):
+                        os.remove(os.path.join(ROOT_PATH_TO_SAVE_ASSESTS, "uploaded_img.jpg"))
+
+                    img.save(os.path.join(ROOT_PATH_TO_SAVE_ASSESTS, "uploaded_img.jpg"))
+                    decoded = cv2.imread(os.path.join(ROOT_PATH_TO_SAVE_ASSESTS, "uploaded_img.jpg"))
+                except Exception as e:
+                    print("Error in webcam style data deliver")
+                    print(e)
             print("88888888888888888888888888888888888888888888888888888")
-
-            # decoded = cv2.imdecode(np.frombuffer(request.data, np.uint8), -1)            
-
-            
-            img = Image.open(io.BytesIO(base64.b64decode(s)))
-            
-            print(img.save("TTTTT.jpeg"))
             
             
-            # print("decoded.shape", decoded.shape)
             
-            if os.path.isfile(os.path.join(ROOT_PATH_TO_SAVE_ASSESTS, "uploaded_img.jpg")):
-                os.remove(os.path.join(ROOT_PATH_TO_SAVE_ASSESTS, "uploaded_img.jpg"))
             
-            cv2.imwrite(os.path.join(ROOT_PATH_TO_SAVE_ASSESTS, "uploaded_img.jpg"), decoded)
 
             segmented_images, boxed_image, predicted_labels, id_holder = fs.analyse(decoded)
 
