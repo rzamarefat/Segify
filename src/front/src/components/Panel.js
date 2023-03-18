@@ -25,7 +25,6 @@ const Panel = ({text}) => {
 
     const postImage = async(imageFile)=>{
 
-
         const reader = new FileReader();
         reader.readAsDataURL(imageFile)
 
@@ -165,13 +164,10 @@ const Panel = ({text}) => {
                         <PredictedLabelsPanel predictedLabels={predictedLabels}/>
                     </div>
 
-                    <div className='col-sm-12 d-flex flex-row justify-content-center align-items-center mt-3'>
-                        {/* <img className="preview" src={uploadedImageFileForDisplay} alt="" /> */}
-                        <img className="preview" src="http://localhost:5001/image" />
-                    </div>
-                    
-                    
-
+                <div className='col-sm-12 d-flex flex-row justify-content-center align-items-center mt-3'>
+                    {/* <img className="preview" src={uploadedImageFileForDisplay} alt="" /> */}
+                    <img className="preview" src="http://localhost:5001/image" />
+                </div>
                     {!selectedObjectInImage &&
                     <button onClick={()=>console.log("Segment button clicked")} type="button" className="btn text-light bg-dark d-flex justify-content-center align-items-center p-4 label-btn" disabled>Segment</button>
                     }
