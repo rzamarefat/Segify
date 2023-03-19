@@ -1,7 +1,6 @@
-import React, {useEffect} from 'react'
+import React from 'react'
 import { useDispatch, useSelector } from "react-redux"
-import { Analyse, Upload, UpdatePredictedLabels, TurnWebcamOn, turnOnSegmentedImageArea, switchLoaderOnOff } from '../redux/actions';
-import { ChangeEvent, useState } from 'react';
+import { Upload, UpdatePredictedLabels, TurnWebcamOn, turnOnSegmentedImageArea, switchLoaderOnOff } from '../redux/actions';
 import axios from 'axios';
 import PredictedLabelsPanel from './PredictedLabelsPanel';
 import Loader from './Loader';
@@ -11,16 +10,10 @@ const Panel = ({text}) => {
     const dispatch = useDispatch()
     const uploadedImage = useSelector(state => state.imageFile)
     const uploadedImageFileForDisplay = useSelector(state => state.imageFileForDisplay)
-    const isWebcamOn = useSelector(state => state.isWebcamOn)
     const predictedLabels = useSelector(state => state.predictedLabels)
     const selectedObjectInImage = useSelector(state => state.selectedObjectInImage)
     const isSegmentShown = useSelector(state => state.isSegmentShown)
     const loaderDisplayState = useSelector(state => state.loaderDisplayState)
-
-
-    // useEffect(() => {
-    //     dispatch(UpdateUploadedAreaImage());
-    // }, [])
 
 
     const postImage = async(imageFile)=>{
@@ -42,7 +35,6 @@ const Panel = ({text}) => {
             console.log("postImage action successful")
 
             await axios.get('http://localhost:5001/upload').then(resp => {
-                console.log("============================")
                 console.log(resp.data)
                 dispatch(UpdatePredictedLabels(resp.data["predicted_labels"]))
             })
@@ -165,7 +157,6 @@ const Panel = ({text}) => {
                     </div>
 
                 <div className='col-sm-12 d-flex flex-row justify-content-center align-items-center mt-3'>
-                    {/* <img className="preview" src={uploadedImageFileForDisplay} alt="" /> */}
                     <img className="preview" src="http://localhost:5001/image" />
                 </div>
                     {!selectedObjectInImage &&
@@ -184,12 +175,7 @@ const Panel = ({text}) => {
                 </div>
                 
             }
-
-            
         </>
-        
-        
-    
   )
 }
 

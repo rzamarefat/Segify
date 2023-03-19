@@ -30,12 +30,9 @@ const Profile = () => {
   const webcamRef = React.useRef(null)
 
   const capture = React.useCallback(() => {
-    console.log("-----------------------------------------")
     const pictureSrc = webcamRef.current.getScreenshot()
     dispatch(doCapture(pictureSrc))
-    console.log("-----------------------------------------")
   })
-
 
   const postCapture = async(imageFile)=>{
         console.log(imageFile)
@@ -74,8 +71,6 @@ const Profile = () => {
             console.log("postImage action unsuccessful")
             console.log(error.response);
         }); 
- 
-        // dispatch(switchLoaderOnOff()) 
     }
 
   
@@ -156,7 +151,6 @@ const Profile = () => {
             </div>
 
         }
-
 
         {!isSegmentShown && 
           <div className="row  d-flex justify-content-center align-items-center">

@@ -41,7 +41,6 @@ class UploadImage(Resource):
         
 
         try:
-            print("88888888888888888888888888888888888888888888888888888")
             try:
                 decoded = cv2.imdecode(np.frombuffer(request.data, np.uint8), -1)
                 if os.path.isfile(os.path.join(ROOT_PATH_TO_SAVE_ASSESTS, "uploaded_img.jpg")):
@@ -64,7 +63,7 @@ class UploadImage(Resource):
                 except Exception as e:
                     print("Error in webcam style data deliver")
                     print(e)
-            print("88888888888888888888888888888888888888888888888888888")
+            
             
             
             segmented_images, boxed_image, predicted_labels, id_holder = fs.analyse(decoded)
