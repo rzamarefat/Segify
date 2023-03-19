@@ -55,8 +55,9 @@ const Profile = () => {
             await axios.get('http://localhost:5001/upload').then(resp => {
                 console.log("============================")
                 console.log(resp.data)
-                dispatch(UpdatePredictedLabels(resp.data["predicted_labels"]))
                 dispatch(switchLoaderOnOff())
+                dispatch(UpdatePredictedLabels(resp.data["predicted_labels"]))
+                
             })
             .then((res)=> {
                 console.log("getDataFromBack action successful")
@@ -114,13 +115,14 @@ const Profile = () => {
   return (
     <div>
       <div className='row d-flex flex-column justify-content-center align-items-center'>
-      </div>        
+      </div>  
+        {loaderDisplayState && <Loader/>}      
         {!isSegmentShown && <div>
           {webcamPicture != '' ? (
             <>
               {(!predictedLabels && !loaderDisplayState) &&
                 <button onClick={() => postCapture(webcamPicture)} type="button" className="btn text-light bg-dark d-flex justify-content-center align-items-center p-4 label-btn">Analyse</button>}
-              {loaderDisplayState && <Loader/>}
+              
               {predictedLabels &&
                 <>
                   <div className='col-sm-2 d-flex flex-row justify-content-center'>
@@ -158,7 +160,7 @@ const Profile = () => {
 
         {!isSegmentShown && 
           <div className="row  d-flex justify-content-center align-items-center">
-            <div className='col-sm-6 d-flex justify-content-center align-items-center'>
+            <div className='col-sm-6 d-flex justify-content-center align-items-center mt-5'>
                                   {!predictedLabels && <>
                                   {webcamPicture == ''? (
                                   <Webcam
