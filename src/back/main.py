@@ -64,8 +64,6 @@ class UploadImage(Resource):
                     print("Error in webcam style data deliver")
                     print(e)
             
-            
-            
             segmented_images, boxed_image, predicted_labels, id_holder = fs.analyse(decoded)
 
             label_data = {}
