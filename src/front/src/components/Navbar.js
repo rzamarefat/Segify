@@ -1,7 +1,5 @@
 import { useDispatch, useSelector } from "react-redux"
 
-import { Increment, Decrement } from "../redux/actions"
-
 
 const Navbar = () => {
     const value = useSelector(state => state.initialValue)

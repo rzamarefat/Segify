@@ -6,7 +6,6 @@ import PredictedLabelsPanel from './PredictedLabelsPanel';
 import Loader from './Loader';
 
 const Panel = ({text}) => {
-    // const [file, setFile] = useState();
     const dispatch = useDispatch()
     const uploadedImage = useSelector(state => state.imageFile)
     const uploadedImageFileForDisplay = useSelector(state => state.imageFileForDisplay)
@@ -91,10 +90,10 @@ const Panel = ({text}) => {
     }
     
     const handleButtonClick = (text)=>{
-        if (text == "Upload an image"){
+        if (text === "Upload an image"){
             console.log("1")
             console.log(text)
-        }else if (text == "Take a photo"){
+        }else if (text === "Take a photo"){
             console.log("2")
             console.log(text)
             dispatch(TurnWebcamOn())

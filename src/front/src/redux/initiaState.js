@@ -7,11 +7,6 @@ const initialState = {
     "isSegmentShown": false,
     "loaderDisplayState": false,
     "webcamPicture": "",
-
-    
-
-    
-
 }
 
 
