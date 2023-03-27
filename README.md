@@ -1,4 +1,4 @@
-# SimCLR Visual Search
+# Segify
 #### Description
 A fullstack YOLO-basd tool for segmenting objects in images instantly
 
