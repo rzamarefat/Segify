@@ -48,8 +48,6 @@ class Segmenter:
 
     def _get_boxes(self, img, results):
         boxes = results[0].boxes
-        hex_colors = ["#"+''.join([choice('0123456789ABCDEF') for j in range(6)])
-                for i in range(len(boxes))]
         
         id_holder = []
         for idx, box in enumerate(boxes):
