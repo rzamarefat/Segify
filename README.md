@@ -3,7 +3,8 @@
 A fullstack YOLO-basd tool for segmenting objects in images instantly
 
 #### Demo
-
+Please watch the following video to see the demo of the project.
+[Segify](https://youtu.be/hPgjD12b83g)
 
 #### Technologies
 - Deep Learning: Pytorch
